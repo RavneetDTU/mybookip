@@ -53,7 +53,9 @@ export default function PaymentPage() {
   }
 
   const { booking } = data
-  const amount = booking.numberOfGuests * 500
+  
+  const amount = booking.bookingAmount
+  // console.log("amount", amount)
 
   // ─── Payfast Signature Generation ────────────────────────────────────────
   //
@@ -134,7 +136,7 @@ export default function PaymentPage() {
         <div className="bg-gray-50 rounded-lg p-4 space-y-3 text-sm">
           <Row label="Booking Name" value={booking.customerName} />
           <Row label="Phone Number" value={booking.phoneNumber} />
-          <Row label="Booking Date" value={booking.bookingTime} />
+          <Row label="Booking Date" value={booking.date} />
           <Row label="Number of People" value={booking.numberOfGuests} />
           <Row label="Allergies" value={booking.allergies || "None"} />
 
