@@ -152,7 +152,7 @@ export default function PaymentPage() {
           in documented order — mismatched order = signature mismatch error.
         */}
         <form
-          action="https://www.payfast.co.za/eng/process"
+          action="https://sandbox.payfast.co.za/eng/process"
           method="post"
           className="mt-6"
         >
