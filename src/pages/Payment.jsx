@@ -52,7 +52,7 @@ export default function PaymentPage() {
     )
   }
 
-  const { booking } = data
+  const { booking, splitPayment } = data
   
   const amount = booking.bookingAmount
   // console.log("amount", amount)
@@ -67,11 +67,11 @@ export default function PaymentPage() {
     let pfOutput = ""
 
     for (const key in pfData) {
-      if (Object.prototype.hasOwnProperty.call(pfData, key)) {
-        const val = pfData[key]
-        if (val !== "" && val !== null && val !== undefined) {
-          pfOutput += `${key}=${encodeURIComponent(String(val).trim()).replace(/%20/g, "+")}&`
-        }
+      if (!Object.prototype.hasOwnProperty.call(pfData, key)) continue
+      if (key === "setup" || key === "signature") continue
+      const val = pfData[key]
+      if (val !== "" && val !== null && val !== undefined) {
+        pfOutput += `${key}=${encodeURIComponent(String(val).trim()).replace(/%20/g, "+")}&`
       }
     }
 
@@ -175,8 +175,20 @@ export default function PaymentPage() {
           <input type="hidden" name="amount" value={pfData["amount"]} />
           <input type="hidden" name="item_name" value={pfData["item_name"]} />
 
-          {/* Signature — always last */}
+          {/* Signature — always last among signed fields. setup is NOT signed. */}
           <input type="hidden" name="signature" value={signature} />
+          {splitPayment?.merchant_id != null && splitPayment?.percentage != null && (
+            <input
+              type="hidden"
+              name="setup"
+              value={JSON.stringify({
+                split_payment: {
+                  merchant_id: Number(splitPayment.merchant_id),
+                  percentage: Number(splitPayment.percentage),
+                },
+              })}
+            />
+          )}
 
           <div className="flex gap-4">
             <button
